@@ -20,7 +20,7 @@ export default function startUp(config: Config) {
 	config.examples.forEach((item) => {
 		registry.define(item.name, async () => {
 			try {
-				const widget = require(`./../../src/examples/${item.name}`);
+				const widget = require(`./examples/${item.name}`);
 				return widget.default;
 			} catch (error) {
 				return Unknown;
