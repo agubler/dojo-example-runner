@@ -22,7 +22,9 @@ export default class extends WidgetBase<AppProperties> {
 
 	@diffProperty('config')
 	protected onConfig(oldProps: AppProperties, newProps: AppProperties) {
-		this._autoNav = newProps.config.autoNav || true;
+		if (newProps.config.autoNav !== undefined) {
+			this._autoNav = newProps.config.autoNav;
+		}
 	}
 
 	protected render(): DNode {
@@ -33,7 +35,7 @@ export default class extends WidgetBase<AppProperties> {
 				<div>
 					<Menu config={config} onAutoNavChange={this._switchAutoNav} autoNav={this._autoNav} />
 				</div>
-				<div>
+				<div classes={[css.content]}>
 					<Outlet
 						id="example"
 						renderer={({ params }) => {
