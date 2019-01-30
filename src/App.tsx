@@ -2,6 +2,7 @@ import { actions, dispatch } from 'codesandbox-api';
 import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
 import { tsx } from '@dojo/framework/widget-core/tsx';
 import Outlet from '@dojo/framework/routing/Outlet';
+import diffProperty from '@dojo/framework/widget-core/decorators/diffProperty';
 
 import Menu from './Menu';
 import * as css from './styles/App.m.css';
@@ -18,6 +19,11 @@ export default class extends WidgetBase<AppProperties> {
 		this._autoNav = !this._autoNav;
 		this.invalidate();
 	};
+
+	@diffProperty('config')
+	protected onConfig(oldProps: AppProperties, newProps: AppProperties) {
+		this._autoNav = newProps.config.autoNav || true;
+	}
 
 	protected render(): DNode {
 		const { config } = this.properties;
