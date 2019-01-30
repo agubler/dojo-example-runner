@@ -1,7 +1,7 @@
 {
 	"name": "dojo-example-runner",
 	"version": "0.0.5-pre",
-	"main": "main.js",
+	"main": "index.js",
 	"scripts": {
 		"benchmark": "node ./run-benchmark.js",
 		"build:esm": "tsc -p tsconfig.esm.json",
