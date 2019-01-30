@@ -16,6 +16,7 @@ export interface MenuProperties {
 export default class extends WidgetBase<MenuProperties> {
 	protected render(): DNode {
 		const { config, onAutoNavChange, autoNav } = this.properties;
+		const showToggle = window !== parent;
 
 		return (
 			<div classes={[css.root]}>
@@ -24,7 +25,7 @@ export default class extends WidgetBase<MenuProperties> {
 					<h1 classes={[css.title]}>{config.name}</h1>
 				</a>
 				<nav classes={[css.nav]}>
-					<Switch
+					{showToggle ? <Switch
 						label="Auto Nav"
 						onChange={onAutoNavChange}
 						checked={autoNav}
@@ -34,7 +35,7 @@ export default class extends WidgetBase<MenuProperties> {
 							toggleSwitch: css.toggleSwitch,
 							checked: css.checked
 						}}
-					/>
+					/> : null}
 					<ul>
 						{config.examples.map((item) => {
 							return (

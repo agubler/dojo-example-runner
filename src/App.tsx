@@ -1,6 +1,6 @@
 import { actions, dispatch } from 'codesandbox-api';
 import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import { tsx, fromRegistry } from '@dojo/framework/widget-core/tsx';
+import { tsx } from '@dojo/framework/widget-core/tsx';
 import Outlet from '@dojo/framework/routing/Outlet';
 
 import Menu from './Menu';
@@ -31,7 +31,6 @@ export default class extends WidgetBase<AppProperties> {
 					<Outlet
 						id="example"
 						renderer={({ params }) => {
-							const Widget = fromRegistry(params.example);
 							if (this._autoNav) {
 								dispatch(actions.editor.openModule(`/src/examples/${params.example}.ts`));
 								dispatch(actions.editor.openModule(`/src/examples/${params.example}.tsx`));
@@ -41,11 +40,12 @@ export default class extends WidgetBase<AppProperties> {
 								config.examples.filter((item) => {
 									return item.name === params.example;
 								})[0] || {};
+
 							return (
 								<div>
 									<h1>{exampleConfig.label}</h1>
 									{exampleConfig.description ? <h4>{exampleConfig.description}</h4> : null}
-									<Widget />
+									<exampleConfig.widgetConstructor />
 								</div>
 							);
 						}}

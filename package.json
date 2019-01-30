@@ -31,9 +31,9 @@
 		"watch": "run-p watch:ts \"build:static:** -- --watch\""
 	},
 	"peerDependencies": {
-		"@dojo/framework": "next",
-		"@dojo/themes": "4.0.1",
-		"@dojo/widgets": "next"
+		"@dojo/framework": "^5.0.0",
+		"@dojo/themes": "^5.0.0",
+		"@dojo/widgets": "^5.0.0"
 	},
 	"dependencies": {
 		"cldrjs": "0.5.0",
