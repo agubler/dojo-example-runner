@@ -15,7 +15,7 @@ export interface AppProperties {
 const factory = create({ diffProperty, icache, invalidator }).properties<AppProperties>();
 
 export default factory(function App({ properties: { config }, middleware: { diffProperty, icache } }) {
-	const autoNav = icache.get<boolean>('auto-nav') || true;
+	const autoNav = icache.get<boolean>('auto-nav') != null ? !!icache.get<boolean>('auto-nav') : !!config.autoNav || true;
 
 	diffProperty('config', (current: AppProperties, next: AppProperties) => {
 		if (next.config.autoNav !== undefined) {
@@ -32,7 +32,6 @@ export default factory(function App({ properties: { config }, middleware: { diff
 				<Menu
 					config={config}
 					onAutoNavChange={() => {
-						const autoNav = icache.get('auto-nav');
 						icache.set('auto-nav', !autoNav);
 					}}
 					autoNav={autoNav}
@@ -43,11 +42,10 @@ export default factory(function App({ properties: { config }, middleware: { diff
 					id="example"
 					renderer={({ params }) => {
 						if (autoNav) {
-							try {
-								dispatch(actions.editor.openModule(`/src/examples/${params.example}.ts`));
-								dispatch(actions.editor.openModule(`/src/examples/${params.example}.tsx`));
-							} catch {
-								// do nothing
+							if (params.example.indexOf('.ts') === -1) {
+								dispatch(actions.notifications.show('Unable to open source please ensure that the example name includes the full extension', 'warning', 1));
+							} else {
+								dispatch(actions.editor.openModule(`/src/examples/${params.example}`));
 							}
 						}
 
