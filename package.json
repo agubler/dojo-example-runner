@@ -1,6 +1,6 @@
 {
 	"name": "dojo-example-runner",
-	"version": "1.0.1-pre",
+	"version": "1.0.1",
 	"main": "index.js",
 	"scripts": {
 		"benchmark": "node ./run-benchmark.js",
