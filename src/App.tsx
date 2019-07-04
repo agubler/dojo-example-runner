@@ -1,65 +1,67 @@
-import { actions, dispatch } from 'codesandbox-api';
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import { tsx } from '@dojo/framework/widget-core/tsx';
+import { create, tsx, diffProperty, invalidator } from '@dojo/framework/core/vdom';
+import { auto } from '@dojo/framework/core/diff';
+import icache from '@dojo/framework/core/middleware/icache';
 import Outlet from '@dojo/framework/routing/Outlet';
-import diffProperty from '@dojo/framework/widget-core/decorators/diffProperty';
+import { actions, dispatch } from 'codesandbox-api';
 
 import Menu from './Menu';
 import * as css from './styles/App.m.css';
 import { Config } from './interfaces';
-import { DNode } from '@dojo/framework/widget-core/interfaces';
 
 export interface AppProperties {
 	config: Config;
 }
 
-export default class extends WidgetBase<AppProperties> {
-	private _autoNav = true;
-	private _switchAutoNav = () => {
-		this._autoNav = !this._autoNav;
-		this.invalidate();
-	};
+const factory = create({ diffProperty, icache, invalidator }).properties<AppProperties>();
 
-	@diffProperty('config')
-	protected onConfig(oldProps: AppProperties, newProps: AppProperties) {
-		if (newProps.config.autoNav !== undefined) {
-			this._autoNav = newProps.config.autoNav;
+export default factory(function App({ properties: { config }, middleware: { diffProperty, icache } }) {
+	const autoNav = icache.get<boolean>('auto-nav') || true;
+
+	diffProperty('config', (current: AppProperties, next: AppProperties) => {
+		if (next.config.autoNav !== undefined) {
+			icache.set('auto-nav', next.config.autoNav);
 		}
-	}
+		if (auto(current, next).changed) {
+			invalidator();
+		}
+	});
 
-	protected render(): DNode {
-		const { config } = this.properties;
-
-		return (
-			<div classes={[css.root]}>
-				<div>
-					<Menu config={config} onAutoNavChange={this._switchAutoNav} autoNav={this._autoNav} />
-				</div>
-				<div classes={[css.content]}>
-					<Outlet
-						id="example"
-						renderer={({ params }) => {
-							if (this._autoNav) {
-								dispatch(actions.editor.openModule(`/src/examples/${params.example}.ts`));
-								dispatch(actions.editor.openModule(`/src/examples/${params.example}.tsx`));
-							}
-
-							const exampleConfig =
-								config.examples.filter((item) => {
-									return item.name === params.example;
-								})[0] || {};
-
-							return (
-								<div>
-									<h1>{exampleConfig.label}</h1>
-									{exampleConfig.description ? <h4>{exampleConfig.description}</h4> : null}
-									<exampleConfig.widgetConstructor />
-								</div>
-							);
-						}}
-					/>
-				</div>
+	return (
+		<div classes={[css.root]}>
+			<div>
+				<Menu
+					config={config}
+					onAutoNavChange={() => {
+						const autoNav = icache.get('auto-nav');
+						icache.set('auto-nav', !autoNav);
+					}}
+					autoNav={autoNav}
+				/>
 			</div>
-		);
-	}
-}
+			<div classes={[css.content]}>
+				<Outlet
+					id="example"
+					renderer={({ params }) => {
+						if (autoNav) {
+							dispatch(actions.editor.openModule(`/src/examples/${params.example}.ts`));
+							dispatch(actions.editor.openModule(`/src/examples/${params.example}.tsx`));
+						}
+
+						const exampleConfig =
+							config.examples.filter((item) => {
+								return item.name === params.example;
+							})[0] || {};
+
+						return (
+							<div>
+								<h1>{exampleConfig.label}</h1>
+								{exampleConfig.description ? <h4>{exampleConfig.description}</h4> : null}
+								<exampleConfig.widgetConstructor />
+							</div>
+						);
+					}}
+				/>
+			</div>
+		</div>
+	);
+});

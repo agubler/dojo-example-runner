@@ -1,9 +1,9 @@
-import { WidgetBaseConstructor } from '@dojo/framework/widget-core/interfaces';
+import { WidgetBaseConstructor, WNodeFactory } from '@dojo/framework/core/interfaces';
 
 export interface Example {
 	name: string;
 	label: string;
-	widgetConstructor: WidgetBaseConstructor;
+	widgetConstructor: WidgetBaseConstructor | WNodeFactory<any>;
 	description?: string;
 }
 
