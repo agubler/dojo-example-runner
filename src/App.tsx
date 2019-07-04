@@ -16,7 +16,11 @@ const factory = create({ diffProperty, icache, invalidator }).properties<AppProp
 
 export default factory(function App({ properties: { config }, middleware: { diffProperty, icache } }) {
 	const autoNav =
-		icache.get<boolean>('auto-nav') != null ? !!icache.get<boolean>('auto-nav') : !!config.autoNav || true;
+		icache.get<boolean>('auto-nav') != null
+			? !!icache.get<boolean>('auto-nav')
+			: config.autoNav != null
+			? config.autoNav
+			: true;
 
 	diffProperty('config', (current: AppProperties, next: AppProperties) => {
 		if (next.config.autoNav !== undefined) {
