@@ -19,7 +19,7 @@ export default factory(function App({ properties: { config }, middleware: { diff
 
 	diffProperty('config', (current: AppProperties, next: AppProperties) => {
 		if (next.config.autoNav !== undefined) {
-			icache.set('auto-nav', next.config.autoNav);
+			icache.getOrSet('auto-nav', next.config.autoNav);
 		}
 		if (auto(current, next).changed) {
 			invalidator();
