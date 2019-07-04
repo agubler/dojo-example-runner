@@ -41,7 +41,7 @@ export default factory(function App({ properties: { config }, middleware: { diff
 				<Outlet
 					id="example"
 					renderer={({ params }) => {
-						if (autoNav != null) {
+						if (autoNav) {
 							if (params.example.indexOf('.ts') === -1) {
 								dispatch(
 									actions.notifications.show(
