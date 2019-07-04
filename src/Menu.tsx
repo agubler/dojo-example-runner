@@ -8,7 +8,7 @@ import { Config } from './interfaces';
 
 export interface MenuProperties {
 	config: Config;
-	autoNav: boolean;
+	autoNav?: boolean;
 	onAutoNavChange: any;
 }
 
@@ -25,7 +25,7 @@ export default factory(function Menu({ properties }) {
 				<h1 classes={[css.title]}>{config.name}</h1>
 			</a>
 			<nav classes={[css.nav]}>
-				{showToggle ? (
+				{showToggle && autoNav != null && (
 					<Switch
 						label="Auto Nav"
 						onChange={onAutoNavChange}
@@ -37,7 +37,7 @@ export default factory(function Menu({ properties }) {
 							checked: css.checked
 						}}
 					/>
-				) : null}
+				)}
 				<ul>
 					{config.examples.map((item) => {
 						return (

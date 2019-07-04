@@ -15,12 +15,7 @@ export interface AppProperties {
 const factory = create({ diffProperty, icache, invalidator }).properties<AppProperties>();
 
 export default factory(function App({ properties: { config }, middleware: { diffProperty, icache } }) {
-	const autoNav =
-		icache.get<boolean>('auto-nav') != null
-			? !!icache.get<boolean>('auto-nav')
-			: config.autoNav != null
-			? config.autoNav
-			: true;
+	const autoNav = icache.getOrSet<boolean>('auto-nav', config.autoNav != null ? config.autoNav : true);
 
 	diffProperty('config', (current: AppProperties, next: AppProperties) => {
 		if (next.config.autoNav !== undefined) {
@@ -46,7 +41,7 @@ export default factory(function App({ properties: { config }, middleware: { diff
 				<Outlet
 					id="example"
 					renderer={({ params }) => {
-						if (autoNav) {
+						if (autoNav != null) {
 							if (params.example.indexOf('.ts') === -1) {
 								dispatch(
 									actions.notifications.show(
