@@ -43,8 +43,12 @@ export default factory(function App({ properties: { config }, middleware: { diff
 					id="example"
 					renderer={({ params }) => {
 						if (autoNav) {
-							dispatch(actions.editor.openModule(`/src/examples/${params.example}.ts`));
-							dispatch(actions.editor.openModule(`/src/examples/${params.example}.tsx`));
+							try {
+								dispatch(actions.editor.openModule(`/src/examples/${params.example}.ts`));
+								dispatch(actions.editor.openModule(`/src/examples/${params.example}.tsx`));
+							} catch {
+								// do nothing
+							}
 						}
 
 						const exampleConfig =
