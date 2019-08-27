@@ -14,7 +14,8 @@ export interface AppProperties {
 
 const factory = create({ diffProperty, icache, invalidator }).properties<AppProperties>();
 
-export default factory(function App({ properties: { config }, middleware: { diffProperty, icache } }) {
+export default factory(function App({ properties, middleware: { diffProperty, icache } }) {
+	const { config } = properties();
 	const autoNav = icache.getOrSet<boolean>('auto-nav', config.autoNav != null ? config.autoNav : true);
 
 	diffProperty('config', (current: AppProperties, next: AppProperties) => {

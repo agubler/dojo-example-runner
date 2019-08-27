@@ -30,12 +30,10 @@
 		"watch:ts": "dojo-tsc-watcher -p tsconfig.json -p tsconfig.esm.json -- dojo-package",
 		"watch": "run-p watch:ts \"build:static:** -- --watch\""
 	},
-	"peerDependencies": {
-		"@dojo/framework": "6.0.0-alpha.10",
-		"@dojo/themes": "^5.0.0",
-		"@dojo/widgets": "6.0.0-alpha.4"
-	},
 	"dependencies": {
+		"@dojo/framework": "^6.0.0",
+		"@dojo/themes": "^6.0.0",
+		"@dojo/widgets": "^6.0.0",
 		"cldrjs": "0.5.0",
 		"codesandbox-api": "0.0.20",
 		"tslib": "~1.9.1"

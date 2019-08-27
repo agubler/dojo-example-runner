@@ -15,7 +15,7 @@ export interface MenuProperties {
 const factory = create({ icache }).properties<MenuProperties>();
 
 export default factory(function Menu({ properties }) {
-	const { config, onAutoNavChange, autoNav } = properties;
+	const { config, onAutoNavChange, autoNav } = properties();
 	const showToggle = window !== parent;
 
 	return (
